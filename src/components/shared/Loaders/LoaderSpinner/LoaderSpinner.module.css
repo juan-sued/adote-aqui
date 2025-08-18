@@ -1,0 +1,22 @@
+.spinner {
+  background-image: linear-gradient(#f89b29 35%, #ff0f7b);
+  width: 100px;
+  height: 100px;
+  animation: rotate360 1.7s linear infinite;
+  text-align: center;
+  border-radius: 50px;
+  filter: blur(1px);
+  box-shadow: 0px -5px 20px 0px #f89b29, 0px 5px 20px 0px #ff0f7b;
+}
+
+.spinner1 {
+  width: 100px;
+  height: 100px;
+  border-radius: 50px;
+  filter: blur(10px);
+}
+@keyframes rotate360 {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -19,19 +19,15 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { utils } from '@/utils'
 import { MenuOptions } from '../NavBarMobile/MenuOptions'
 import paramsSite from '@/data/paramsSite'
+import { createClient } from '@/utils/supabase/server'
 
 export async function MenuDesktop() {
-  // const supabase = await createClient()
+  const supabase = await createClient()
 
-  // const {
-  //   data: { user },
-  // } = await supabase.auth.getUser()
-  const user = {
-    user_metadata: {
-      name: 'Entre Ser e Estar',
-      image: 'https://mighty.tools/mockmind-api/content/abstract/51.jpg',
-    },
-  }
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
   const headerDesktopMenu = paramsSite.sections.filter(
     (section) => section.href !== '#home' && section.href !== '#differences',
   )
@@ -95,14 +91,14 @@ export async function MenuDesktop() {
                 >
                   <ChevronDown />
 
-                  {user.user_metadata?.image && (
+                  {user.user_metadata.avatar_url && (
                     <Avatar
                       className="h-full w-fit
                   "
                     >
                       <AvatarImage
                         alt="Foto de perfil"
-                        src={user.user_metadata?.image}
+                        src={user.user_metadata.avatar_url}
                       />
                       <AvatarFallback className="aspect-square size-full">
                         {utils.getInitials(user.user_metadata?.name)}

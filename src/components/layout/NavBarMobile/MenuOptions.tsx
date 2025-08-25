@@ -9,13 +9,26 @@ import {
 } from '@/components/ui/dropdown-menu'
 import paramsSite from '@/data/paramsSite'
 
-import { ChevronRight, Moon, ShieldCheckIcon, Sun } from 'lucide-react'
+import {
+  ChevronRight,
+  LogOutIcon,
+  Moon,
+  ShieldCheckIcon,
+  Sun,
+} from 'lucide-react'
 import Link from 'next/link'
 import ToggleTheme from './ToggleTheme'
+import { createClient } from '@/utils/supabase/server'
+import LogoutButton from '@/components/shared/Buttons/LogOutButton'
 
-export function MenuOptions({ children }: { children: React.ReactNode }) {
-  const ContactIcon = paramsSite.contactList[0].icon
+export async function MenuOptions({ children }: { children: React.ReactNode }) {
+  const supabase = await createClient()
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  console.log('USER MENU OPTIONS', user)
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
@@ -53,24 +66,29 @@ export function MenuOptions({ children }: { children: React.ReactNode }) {
           </ToggleTheme>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
+        {user && (
+          <>
+            <DropdownMenuGroup>
+              <LogoutButton>
+                <DropdownMenuItem className="cursor-pointer ">
+                  <span className="font-medium">Sair</span>
+
+                  <DropdownMenuShortcut>
+                    <LogOutIcon className="text-primary" />
+                  </DropdownMenuShortcut>
+                </DropdownMenuItem>
+              </LogoutButton>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+          </>
+        )}
+
         <DropdownMenuGroup className="grid gap-1">
           <Link href={paramsSite.contactList[0].href}>
             <DropdownMenuItem className="cursor-pointer text-white font-semibold  bg-primary focus:bg-primary/90">
               <div className="flex w-full  gap-2 ">
                 <ShieldCheckIcon size={20} className="text-white" />
                 <p className="text-xs"> {paramsSite.ctaButtonText}</p>
-              </div>
-              <DropdownMenuShortcut>
-                <ChevronRight className="text-white" />
-              </DropdownMenuShortcut>
-            </DropdownMenuItem>
-          </Link>
-
-          <Link target="_blank" href={paramsSite.contactList[0].href}>
-            <DropdownMenuItem className="cursor-pointer text-white font-semibold  bg-green-500 focus:bg-green-500/90">
-              <div className="flex w-full  gap-2 ">
-                <ContactIcon size={20} className="text-white" />
-                Entrar em contato
               </div>
               <DropdownMenuShortcut>
                 <ChevronRight className="text-white" />
